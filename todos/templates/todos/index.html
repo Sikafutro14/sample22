@@ -1,0 +1,23 @@
+{% extends './base.html' %}
+
+
+{% block content %}
+
+
+<ul>
+    {% for todo in todos %}
+    <li>
+        <a href="{% url 'detail' todo.id %}">{{ todo.description }}</a>
+        {% if todo.extracted_date %}
+        - Date: {{ todo.extracted_date }}
+        {% endif %}
+        {% if todo.extracted_time %}
+            - Time: {{ todo.extracted_time }}
+        {% endif %}
+        <a href="{% url 'edit' todo.id %}">Edit</a>
+    </li>
+    {% endfor %}
+</ul>
+
+
+{% endblock %}
