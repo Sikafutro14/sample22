@@ -57,7 +57,8 @@ def todo_details(request, pk):
         todo = Todo.objects.get(id=pk)
         return render(request, 'todos/detail.html', {'todo': todo})
     except Todo.DoesNotExist:
-        return HttpResponseRedirect('/')
+        return HttpResponseRedirect(reverse('detail', args=[todo.id]))
+
     
 
 def edit(request, pk):
@@ -69,8 +70,18 @@ def edit(request, pk):
         return HttpResponseRedirect('/')
 
 
+def delete(request, pk):
+    todo = get_object_or_404(Todo, id=pk)
+    
+    if request.method == 'POST':
+        if 'confirm' in request.POST:
+            todo.delete()
+            messages.success(request, 'Todo item successfully deleted.')
+            return HttpResponseRedirect(reverse('list_todo'))  # Redirect to list after deletion
+        else:
+            return HttpResponseRedirect(reverse('todo_details', args=[pk]))
 
-
+    return render(request, 'todos/delete.html', {'todo': todo})
 
 
 
